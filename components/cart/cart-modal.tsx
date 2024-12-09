@@ -18,12 +18,8 @@ export default function CartModal() {
   const quantityRef = useRef(cart?.totalQuantity);
 
   useEffect(() => {
-    if (
-      cart?.totalQuantity &&
-      cart?.totalQuantity !== quantityRef.current &&
-      cart?.totalQuantity > 0
-    ) {
-      if (!isOpen) {
+    if (cart?.totalQuantity !== quantityRef.current) {
+      if (cart?.totalQuantity && cart?.totalQuantity > 0 && !isOpen) {
         setIsOpen(true);
       }
       quantityRef.current = cart?.totalQuantity;
