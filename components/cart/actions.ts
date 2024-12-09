@@ -11,9 +11,9 @@ export async function getCartId(): Promise<string | undefined> {
   return (await cookies()).get(`${tokenHash}/cartId`)?.value;
 }
 
-function setCartId(cartId: string) {
+async function setCartId(cartId: string) {
   const tokenHash = process.env.NEXT_PUBLIC_FW_STOREFRONT_TOKEN;
-  cookies().set(`${tokenHash}/cartId`, cartId);
+  (await cookies()).set(`${tokenHash}/cartId`, cartId);
 }
 
 export async function addItem(prevState: any, selectedVariantId: string | undefined) {
@@ -116,6 +116,6 @@ export async function redirectToCheckout(currency: string) {
 
 export async function createCartAndSetCookie() {
   let cart = await createCart();
-  setCartId(cart.id!!);
+  await setCartId(cart.id!!);
   return cart;
 }

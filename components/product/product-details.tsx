@@ -14,13 +14,15 @@ import { useCart } from 'components/cart/cart-context';
 import { useProduct } from 'components/product/product-context';
 import 'katex/dist/katex.min.css';
 import { Leva, useControls } from 'leva';
-import { Product } from 'lib/types';
+import { Image, Product } from 'lib/types';
 import { dynamicSizeLabels, formatPrice } from 'lib/utils';
 import { Link } from 'next-view-transitions';
 import { useActionState, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import Latex from 'react-latex-next';
 import * as THREE from 'three';
+// @ts-ignore
 import { ParametricGeometries } from 'three/addons/geometries/ParametricGeometries.js';
+// @ts-ignore
 import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
 import s from './product-details.module.css';
 
@@ -51,10 +53,11 @@ function Env() {
       onChange: (value) => startTransition(() => setPreset(value))
     }
   });
+  // @ts-ignore
   return <Environment preset={preset} background blur={blur} />;
 }
 
-function Klein({ texture, roughness }) {
+function Klein({ texture, roughness }: { texture: any; roughness: number }) {
   const geometry = useMemo(() => {
     return new ParametricGeometry(ParametricGeometries.klein, 100, 20);
   }, []);
@@ -127,7 +130,7 @@ function Klein({ texture, roughness }) {
   );
 }
 
-function Sphere({ texture, roughness }) {
+function Sphere({ texture, roughness }: { texture: any; roughness: number }) {
   /* @ts-ignore */
   texture.wrapS = THREE.RepeatWrapping;
   /* @ts-ignore */
@@ -170,7 +173,7 @@ function Sphere({ texture, roughness }) {
   );
 }
 
-function MobiusStrip({ texture, roughness }) {
+function MobiusStrip({ texture, roughness }: { texture: any; roughness: number }) {
   const geometry = useMemo(() => {
     return new ParametricGeometry(ParametricGeometries.mobius, 100, 20);
   }, []);
@@ -242,7 +245,7 @@ function MobiusStrip({ texture, roughness }) {
   );
 }
 
-function Torus({ texture, roughness }) {
+function Torus({ texture, roughness }: { texture: any; roughness: number }) {
   /* @ts-ignore */
   texture.wrapS = THREE.RepeatWrapping;
   /* @ts-ignore */
@@ -284,7 +287,7 @@ function Torus({ texture, roughness }) {
   );
 }
 
-function E3({ texture, roughness }) {
+function E3({ texture, roughness }: { texture: any; roughness: number }) {
   /* @ts-ignore */
   texture.wrapS = THREE.RepeatWrapping;
   /* @ts-ignore */
@@ -323,7 +326,7 @@ function GeometryContainer({
   imgIndex,
   activeControl
 }: {
-  imgs: Product[];
+  imgs: Image[];
   imgIndex: number;
   activeControl: number;
 }) {
@@ -335,6 +338,7 @@ function GeometryContainer({
     () => ({ 1: E3, 2: Torus, 3: Sphere, 4: Klein, 5: MobiusStrip }),
     []
   );
+  // @ts-ignore
   const ActiveGeometry = controlToGeometry[activeControl];
   // const roughness = 0.37;
 
@@ -343,7 +347,11 @@ function GeometryContainer({
     return <></>;
   } else {
     return (
-      <ActiveGeometry texture={textures[imgIndex]} key={imgs[imgIndex].url} roughness={roughness} />
+      <ActiveGeometry
+        texture={textures[imgIndex]}
+        key={imgs[imgIndex]!.url}
+        roughness={roughness}
+      />
     );
   }
 }
@@ -376,14 +384,19 @@ export function ProductDetails({ product }: { product: Product }) {
       const [hex, name] = x.split(':');
       return { hex, name };
     });
+  // @ts-ignore
   const sizeLabels = useMemo(() => dynamicSizeLabels(sizes), [product]);
 
   const galleryScroll = (id: string) => {
     try {
+      // @ts-ignore
       galleryRef.current.scrollTo({
         behavior: 'smooth',
+
         top:
+          // @ts-ignore
           document.getElementById(id)?.getBoundingClientRect().top -
+          // @ts-ignore
           galleryRef.current.getBoundingClientRect().top -
           30
       });
@@ -444,7 +457,7 @@ export function ProductDetails({ product }: { product: Product }) {
             <Canvas shadows camera={{ position: [0, 0, 3.6], fov: 50 }}>
               <group position={[0, -0.65, 0]}>
                 <GeometryContainer
-                  imgs={product.variants[activeVariant]?.images}
+                  imgs={product.variants[activeVariant]?.images!}
                   imgIndex={activeImage}
                   activeControl={activeControl}
                 />
@@ -512,6 +525,7 @@ export function ProductDetails({ product }: { product: Product }) {
                     className={`${s.size} ${product.variants[activeVariant]?.selectedOptions.size === size ? s.activeSize : ''}`}
                     onClick={() => updateVariant({ size })}
                   >
+                    {/* @ts-ignore */}
                     <Latex>$\ \aleph_{`{\\mathcal{${sizeLabels[size]}}}`}$</Latex>
                   </div>
                 ))}
@@ -536,13 +550,13 @@ export function ProductDetails({ product }: { product: Product }) {
             )}
 
             <div className={s.price}>
-              <Latex>$\text{`{${formatPrice(product.variants[activeVariant].price)}}`}$</Latex>
+              <Latex>$\text{`{${formatPrice(product.variants[activeVariant]!.price)}}`}$</Latex>
             </div>
 
             <form
               action={async () => {
-                addCartItem(product.variants[activeVariant], product);
-                await formAction.bind(null, product.variants[activeVariant].id)();
+                addCartItem(product.variants[activeVariant]!, product);
+                await formAction.bind(null, product.variants[activeVariant]!.id)();
               }}
             >
               <button className={s.addToCart}>

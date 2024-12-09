@@ -11,7 +11,7 @@ import { getCart, getProduct } from 'lib/fourthwall';
 export async function generateMetadata({
   params
 }: {
-  params: { handle: string };
+  params: Promise<{ handle: string }>;
 }): Promise<Metadata> {
   const product = await getProduct({ handle: (await params).handle, currency: 'GBP' });
 
@@ -50,8 +50,8 @@ export default async function ProductPage({
   params,
   searchParams
 }: {
-  params: { handle: string };
-  searchParams: { currency?: string };
+  params: Promise<{ handle: string }>;
+  searchParams: Promise<{ currency?: string }>;
 }) {
   const currency = (await searchParams).currency || 'GBP';
   const cartId = await getCartId();

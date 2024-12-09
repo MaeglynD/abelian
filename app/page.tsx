@@ -10,9 +10,9 @@ export const metadata = {
   }
 };
 
-export default async function HomePage({ searchParams }: { searchParams: { currency?: string } }) {
+export default async function HomePage({ params }: { params: Promise<{ currency?: string }> }) {
   const cartId = await getCartId();
-  const currency = (await searchParams).currency || 'GBP';
+  const currency = (await params)?.currency || 'GBP';
   const cart = getCart(cartId, currency);
   const products = await getCollectionProducts({ collection: 'commutator', currency });
 

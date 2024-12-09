@@ -40,13 +40,15 @@ export const formatPrice = ({
   amount,
   currencyCode: currency
 }: {
-  amount: number;
+  amount: number | string;
   currencyCode: string;
 }) => {
+  /* @ts-ignore */
+  amount = parseInt(amount);
   return `${currency === 'USD' ? '\\' : ''}${new Intl.NumberFormat('en', { style: 'currency', currency }).format(amount)}`;
 };
 
-export const dynamicSizeLabels = (sizes) => {
+export const dynamicSizeLabels = (sizes: string[]) => {
   return {
     ...sizes.reduce((a, c) => ({ ...a, [c]: c }), {}),
     ...SIZE_LABELS

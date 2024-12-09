@@ -1,5 +1,12 @@
-import { Cart, CartItem, Image, Money, Product, ProductVariant } from "lib/types";
-import { FourthwallCart, FourthwallCartItem, FourthwallMoney, FourthwallProduct, FourthwallProductImage, FourthwallProductVariant } from "./types";
+import { Cart, CartItem, Image, Money, Product, ProductVariant } from 'lib/types';
+import {
+  FourthwallCart,
+  FourthwallCartItem,
+  FourthwallMoney,
+  FourthwallProduct,
+  FourthwallProductImage,
+  FourthwallProductVariant
+} from './types';
 
 /**
  * Utils
@@ -9,15 +16,14 @@ const DEFAULT_IMAGE: Image = {
   altText: '',
   width: 0,
   height: 0
-}
-
+};
 
 const reshapeMoney = (money: FourthwallMoney): Money => {
   return {
     amount: money.value.toString(),
     currencyCode: money.currency
   };
-}
+};
 
 /**
  * Products
@@ -51,14 +57,14 @@ export const reshapeProduct = (product: FourthwallProduct): Product | undefined 
   const maxPrice = Math.max(...variants.map((v) => v.unitPrice.value));
 
   const currencyCode = variants[0]?.unitPrice.currency || 'USD';
-  const attributes = variants.map((v) => (v.attributes))
+  const attributes = variants.map((v) => v.attributes);
 
   const sizes = new Set(attributes.filter((a) => !!a.size).map((v) => v.size?.name));
-  const colors = new Set(attributes.filter((a) => !!a.color).map((v) => `${v.color?.swatch}:${v.color?.name}`));
+  const colors = new Set(
+    attributes.filter((a) => !!a.color).map((v) => `${v.color?.swatch}:${v.color?.name}`)
+  );
 
   const reshapedVariants = reshapeVariants(variants);
-
-  
 
   return {
     ...rest,
@@ -67,30 +73,33 @@ export const reshapeProduct = (product: FourthwallProduct): Product | undefined 
     descriptionHtml: product.description,
     description: cleanHtml(product.description),
     images: reshapeImages(images, product.name),
-    variants: reshapedVariants.filter(x => x.availableForSale),
+    variants: reshapedVariants.filter((x) => x.availableForSale),
     priceRange: {
       minVariantPrice: {
         amount: minPrice.toString(),
-        currencyCode,
+        currencyCode
       },
       maxVariantPrice: {
         amount: maxPrice.toString(),
-        currencyCode,
+        currencyCode
       }
     },
     featuredImage: reshapeImages(images, product.name)[0] || DEFAULT_IMAGE,
-    options: [{
-      id: 'color',
-      name: 'Color',
-      values: [...colors].filter((c) => !!c) as string[]
-    }, {
-      id: 'size',
-      name: 'Size',
-      values: [...sizes].filter((s) => !!s) as string[]
-    }],    
+    options: [
+      {
+        id: 'color',
+        name: 'Color',
+        values: [...colors].filter((c) => !!c) as string[]
+      },
+      {
+        id: 'size',
+        name: 'Size',
+        values: [...sizes].filter((s) => !!s) as string[]
+      }
+    ],
     availableForSale: reshapedVariants.some((v) => v.availableForSale),
     tags: [],
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   };
 };
 
@@ -105,6 +114,7 @@ const reshapeImages = (images: FourthwallProductImage[], productTitle: string): 
 };
 
 const reshapeVariants = (variants: FourthwallProductVariant[]): ProductVariant[] => {
+  // @ts-ignore
   return variants.map((v) => ({
     id: v.id,
     title: v.name,
@@ -121,9 +131,9 @@ const reshapeVariants = (variants: FourthwallProductVariant[]): ProductVariant[]
     //   name: 'Color',
     //   value: v.attributes.color?.name,
     // }],
-    price: reshapeMoney(v.unitPrice),
-  }))
-}
+    price: reshapeMoney(v.unitPrice)
+  }));
+};
 
 /**
  * Cart
@@ -134,7 +144,7 @@ const reshapeCartItem = (item: FourthwallCartItem): CartItem => {
     quantity: item.quantity,
     cost: {
       totalAmount: reshapeMoney({
-        value: (item.variant.unitPrice.value * item.quantity),
+        value: item.variant.unitPrice.value * item.quantity,
         currency: item.variant.unitPrice.currency
       })
     },
@@ -148,7 +158,7 @@ const reshapeCartItem = (item: FourthwallCartItem): CartItem => {
       },
       product: {
         // TODO: need this product info in model
-        id: item.variant.product?.id || 'TT', 
+        id: item.variant.product?.id || 'TT',
         handle: item.variant.product?.slug || 'TT',
         title: item.variant.product?.name || 'TT',
         featuredImage: {
@@ -160,10 +170,12 @@ const reshapeCartItem = (item: FourthwallCartItem): CartItem => {
       }
     }
   };
-}
+};
 
 export const reshapeCart = (cart: FourthwallCart): Cart => {
-  const totalValue = cart.items.map((item) => item.quantity * item.variant.unitPrice.value).reduce((a, b) => a + b, 0);
+  const totalValue = cart.items
+    .map((item) => item.quantity * item.variant.unitPrice.value)
+    .reduce((a, b) => a + b, 0);
   const currencyCode = cart.items[0]?.variant.unitPrice.currency || 'USD';
 
   return {
@@ -171,12 +183,12 @@ export const reshapeCart = (cart: FourthwallCart): Cart => {
     cost: {
       totalAmount: {
         amount: totalValue.toString(),
-        currencyCode,
+        currencyCode
       },
       subtotalAmount: {
         amount: totalValue.toString(),
-        currencyCode,
-      },
+        currencyCode
+      }
     },
     lines: cart.items.map(reshapeCartItem),
     currency: currencyCode,

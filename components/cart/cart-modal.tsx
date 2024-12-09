@@ -32,7 +32,9 @@ export default function CartModal() {
 
   const sizeLabels = useMemo(
     () =>
-      dynamicSizeLabels([...new Set(cart?.lines.map((x) => x.merchandise.selectedOptions.size))]),
+      dynamicSizeLabels([
+        ...new Set(cart?.lines.map((x) => x.merchandise.selectedOptions.size || ''))
+      ]),
     [cart]
   );
 
@@ -70,7 +72,8 @@ export default function CartModal() {
                         />
                         <Latex>
                           $\ \ * \ \ \aleph_
-                          {`{\\mathcal{${sizeLabels[p.merchandise.selectedOptions.size]}}}`}$
+                          {`{\\mathcal{${sizeLabels[p.merchandise.selectedOptions.size as keyof typeof sizeLabels]}}}`}
+                          $
                         </Latex>
                       </div>
 
@@ -132,7 +135,7 @@ export default function CartModal() {
                 )}
               </div>
 
-              <form action={() => redirectToCheckout(cart.currency)}>
+              <form action={() => redirectToCheckout(cart?.currency || 'GBP')}>
                 <CheckoutButton disabled={!cart?.lines.length} />
               </form>
             </div>
@@ -143,7 +146,7 @@ export default function CartModal() {
   );
 }
 
-function CheckoutButton({ disabled }) {
+function CheckoutButton({ disabled }: { disabled: boolean }) {
   const { pending } = useFormStatus();
 
   return (
