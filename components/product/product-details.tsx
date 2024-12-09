@@ -451,7 +451,6 @@ export function ProductDetails({ product }: { product: Product }) {
           />
           <div
             className={s.canvasContainer}
-            // style={{ display: `${activeControl === 0 ? 'none' : ''}` }}
             style={{ zIndex: `${activeControl === 0 ? '-1' : '2'}` }}
           >
             <Canvas shadows camera={{ position: [0, 0, 3.6], fov: 50 }}>

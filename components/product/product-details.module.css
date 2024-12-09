@@ -31,16 +31,14 @@
   display: flex;
   justify-content: center;
   margin: auto;
-  max-width: 1600px;
+  max-width: 1200px;
   width: 100%;
-  /* max-height: 700px; */
-  padding: 10px;
+  padding: 20px;
 }
 
 .gallery{
-  min-width: 150px;
-  max-width: 150px;
-  /* background: lightgreen; */
+  min-width: 112px;
+  max-width: 112px;
   position: relative;
 }
 
@@ -56,7 +54,7 @@
 }
 
 .galleryInner::-webkit-scrollbar { 
-    display: none;
+  display: none;
 }
 
 .galleryItem{
@@ -89,22 +87,21 @@
   width: 100%;
   object-fit: contain;
   opacity: 1;
-  padding: 50px;
-  max-height: 610px;
+  padding: 38px;
+  max-height: 458px;
 }
 
 img.hiddenImage{
   opacity: 0;
 }
 
-
 .canvasContainer{
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(100% - 80px);
-  padding: 20px;
+  height: calc(100% - 60px);
+  padding: 15px;
   /* background: rgba(0,0,0,0.05); */
 }
 
@@ -141,13 +138,13 @@ img.hiddenImage{
 .showcaseControls{
   display: flex;
   justify-content: center;
-  padding-top: 20px;
+  padding-top: 15px;
 }
 
 .showcaseControl{
-  font-size: 25px;
-  width: 70px;
-  height: 70px;
+  font-size: 18px;
+  width: 52px;
+  height: 52px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -167,7 +164,7 @@ img.hiddenImage{
   width: 100%;
   max-width: 40%;
   line-height:2;
-  padding: 20px;
+  padding: 15px;
   padding-bottom: 0;
   display: flex;
   flex-direction: column;
@@ -178,28 +175,28 @@ img.hiddenImage{
 }
 
 .description{
-  font-size: 20px;
-  padding-bottom: 20px;
+  font-size: 15px;
+  padding-bottom: 15px;
 }
 
 .descriptionLowerHalf{
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
 .sizes{
   display: flex;
   justify-content: end;
-  font-size: 23px;
+  font-size: 17px;
   color: rgba(0,0,0,0.57);
-  margin-right: -22px;
+  margin-right: -16px;
 }
 
 .size{
   text-align: center;
-  padding: 0 15px;
+  padding: 0 11px;
   border: 1px solid transparent;
   cursor: pointer;
 }
@@ -212,13 +209,13 @@ img.hiddenImage{
 .colors{
   display: flex;
   justify-content: end;
-  margin-right: -12.5px;
+  margin-right: -9px;
 }
 
 .color{
-  padding: 12.5px;
-  height: 50px;
-  width: 50px;
+  padding: 9px;
+  height: 37.5px;
+  width: 37.5px;
   cursor: pointer;
 }
 
@@ -234,7 +231,7 @@ img.hiddenImage{
 .price{
   display: flex;
   justify-content: end;
-  font-size: 27px;
+  font-size: 20px;
 }
 
 .addToCart{
@@ -242,8 +239,8 @@ img.hiddenImage{
   background: rgba(0,0,0,0.8);
   border: none;
   outline: none;
-  padding: 15px;
-  font-size: 16px;
+  padding: 11px;
+  font-size: 12px;
   cursor: pointer;
   color: white;
   transition: 0.2s;
