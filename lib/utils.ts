@@ -1,4 +1,5 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
+import { SIZE_LABELS } from './constants';
 
 export const createUrl = (pathname: string, params: URLSearchParams | ReadonlyURLSearchParams) => {
   const paramsString = params.toString();
@@ -11,7 +12,13 @@ export const ensureStartsWith = (stringToCheck: string, startsWith: string) =>
   stringToCheck.startsWith(startsWith) ? stringToCheck : `${startsWith}${stringToCheck}`;
 
 export const validateEnvironmentVariables = () => {
-  const requiredEnvironmentVariables = ['NEXT_PUBLIC_FW_API_URL', 'NEXT_PUBLIC_FW_STOREFRONT_TOKEN', 'NEXT_PUBLIC_FW_COLLECTION', 'NEXT_PUBLIC_FW_CHECKOUT', 'NEXT_PUBLIC_VERCEL_URL'];
+  const requiredEnvironmentVariables = [
+    'NEXT_PUBLIC_FW_API_URL',
+    'NEXT_PUBLIC_FW_STOREFRONT_TOKEN',
+    'NEXT_PUBLIC_FW_COLLECTION',
+    'NEXT_PUBLIC_FW_CHECKOUT',
+    'NEXT_PUBLIC_VERCEL_URL'
+  ];
   const missingEnvironmentVariables = [] as string[];
 
   requiredEnvironmentVariables.forEach((envVar) => {
@@ -27,4 +34,21 @@ export const validateEnvironmentVariables = () => {
       )}\n`
     );
   }
+};
+
+export const formatPrice = ({
+  amount,
+  currencyCode: currency
+}: {
+  amount: number;
+  currencyCode: string;
+}) => {
+  return `${currency === 'USD' ? '\\' : ''}${new Intl.NumberFormat('en', { style: 'currency', currency }).format(amount)}`;
+};
+
+export const dynamicSizeLabels = (sizes) => {
+  return {
+    ...sizes.reduce((a, c) => ({ ...a, [c]: c }), {}),
+    ...SIZE_LABELS
+  };
 };

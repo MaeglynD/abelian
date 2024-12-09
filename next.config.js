@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  transpilePackages: ['three'],
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
@@ -7,7 +8,7 @@ module.exports = {
         protocol: 'https',
         hostname: '**',
         pathname: '**'
-      }      
+      }
     ]
   }
 };

@@ -5,9 +5,6 @@ module.exports = {
   content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['var(--font-geist-sans)']
-      },
       keyframes: {
         fadeIn: {
           from: { opacity: 0 },
@@ -33,22 +30,5 @@ module.exports = {
   future: {
     hoverOnlyWhenSupported: true
   },
-  plugins: [
-    require('@tailwindcss/container-queries'),
-    require('@tailwindcss/typography'),
-    plugin(({ matchUtilities, theme }) => {
-      matchUtilities(
-        {
-          'animation-delay': (value) => {
-            return {
-              'animation-delay': value
-            };
-          }
-        },
-        {
-          values: theme('transitionDelay')
-        }
-      );
-    })
-  ]
+  plugins: []
 };

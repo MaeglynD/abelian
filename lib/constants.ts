@@ -29,3 +29,18 @@ export const TAGS = {
 export const HIDDEN_PRODUCT_TAG = 'nextjs-frontend-hidden';
 export const DEFAULT_OPTION = 'Default Title';
 
+export const SIZE_LABELS = {
+    S: 'S',
+    M: 'M',
+    L: 'L',
+    '2XS': 'S^(-2)',
+    XXS: 'S^(-2)',
+    XS: 'S^(-1)',
+    XL: 'L^2',
+    '2XL': 'L^3',
+    XXL: 'L^3',
+    '3XL': 'L^4',
+    XXXL: 'L^4',
+    '4XL': 'L^4',
+    XXXXL: 'L^4'
+  };

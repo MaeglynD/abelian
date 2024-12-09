@@ -1,5 +1,5 @@
-import { GeistSans } from 'geist/font/sans';
 import { ensureStartsWith } from 'lib/utils';
+import { ViewTransitions } from 'next-view-transitions';
 import { ReactNode } from 'react';
 import './globals.css';
 
@@ -31,12 +31,11 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-
   return (
-    <html lang="en" className={GeistSans.variable}>
-      <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
-        {children}
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en">
+        <body className="">{children}</body>
+      </html>
+    </ViewTransitions>
   );
 }

@@ -21,13 +21,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date().toISOString()
   }));
 
-  const productsPromise = getCollectionProducts({ collection: 'all', currency: 'USD', limit: 100 }).then((products) =>
+  const productsPromise = getCollectionProducts({
+    collection: 'all',
+    currency: 'GBP',
+    limit: 100
+  }).then((products) =>
     products.map((product) => ({
       url: `${baseUrl}/product/${product.handle}`,
       lastModified: product.updatedAt
     }))
   );
-  
+
   let fetchedRoutes: Route[] = [];
 
   try {

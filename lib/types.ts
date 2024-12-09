@@ -4,7 +4,7 @@ export type Cart = {
     subtotalAmount: Money;
     totalAmount: Money;
   };
-  totalQuantity: number;  
+  totalQuantity: number;
   lines: CartItem[];
   currency: string;
 };
@@ -26,9 +26,9 @@ export type CartItem = {
     id: string;
     title: string;
     selectedOptions: {
-      name: string;
-      value?: string;
-    }[];
+      size?: string;
+      color?: string;
+    };
     product: CartProduct;
   };
 };
@@ -81,9 +81,13 @@ export type ProductVariant = {
   title: string;
   availableForSale: boolean;
   selectedOptions: {
-    name: string;
-    value?: string;
-  }[];
+    size: string;
+    color: string;
+  };
+  // selectedOptions: {
+  //   name: string;
+  //   value?: string;
+  // };
   price: Money;
   images: Image[];
 };

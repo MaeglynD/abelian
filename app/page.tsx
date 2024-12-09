@@ -1,12 +1,10 @@
-import { Carousel } from 'components/carousel';
 import { getCartId } from 'components/cart/actions';
-import { ThreeItemGrid } from 'components/grid/three-items';
-import Footer from 'components/layout/footer';
+import { ProductList } from 'components/product/product-list';
 import { Wrapper } from 'components/wrapper';
-import { getCart } from 'lib/fourthwall';
+import { getCart, getCollectionProducts } from 'lib/fourthwall';
 
 export const metadata = {
-  description: 'High-performance ecommerce store built with Next.js, Vercel, and Fourthwall.',
+  description: 'This is what riemann dreamed of',
   openGraph: {
     type: 'website'
   }
@@ -14,15 +12,13 @@ export const metadata = {
 
 export default async function HomePage({ searchParams }: { searchParams: { currency?: string } }) {
   const cartId = await getCartId();
-  const currency = searchParams.currency || 'USD';
-  // Don't await the fetch, pass the Promise to the context provider
+  const currency = (await searchParams).currency || 'GBP';
   const cart = getCart(cartId, currency);
+  const products = await getCollectionProducts({ collection: 'commutator', currency });
 
   return (
     <Wrapper currency={currency} cart={cart}>
-      <ThreeItemGrid currency={currency} />
-      <Carousel currency={currency} />
-      <Footer />
+      <ProductList products={products} />
     </Wrapper>
   );
 }

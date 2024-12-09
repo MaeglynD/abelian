@@ -2,21 +2,18 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { getCartId } from 'components/cart/actions';
-import Footer from 'components/layout/footer';
-import { Gallery } from 'components/product/gallery';
 import { ProductProvider } from 'components/product/product-context';
-import { ProductDescription } from 'components/product/product-description';
+import { ProductDetails } from 'components/product/product-details';
 import { Wrapper } from 'components/wrapper';
 import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
 import { getCart, getProduct } from 'lib/fourthwall';
-import { Suspense } from 'react';
 
 export async function generateMetadata({
   params
 }: {
   params: { handle: string };
 }): Promise<Metadata> {
-  const product = await getProduct({ handle: params.handle, currency: 'USD' });
+  const product = await getProduct({ handle: (await params).handle, currency: 'GBP' });
 
   if (!product) return notFound();
 
@@ -49,15 +46,20 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductPage({ params, searchParams }: { params: { handle: string }, searchParams: { currency?: string } }) {
-  const currency = searchParams.currency || 'USD';
-  const cartId = await getCartId()
+export default async function ProductPage({
+  params,
+  searchParams
+}: {
+  params: { handle: string };
+  searchParams: { currency?: string };
+}) {
+  const currency = (await searchParams).currency || 'GBP';
+  const cartId = await getCartId();
+  const cart = getCart(cartId, currency);
 
-  const cart = getCart(cartId, currency)
-  
   const product = await getProduct({
-    handle: params.handle,
-    currency,
+    handle: (await params).handle,
+    currency
   });
 
   if (!product) return notFound();
@@ -88,28 +90,7 @@ export default async function ProductPage({ params, searchParams }: { params: { 
             __html: JSON.stringify(productJsonLd)
           }}
         />
-        <div className="mx-auto max-w-screen-2xl px-4">
-          <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
-            <div className="h-full w-full basis-full lg:basis-4/6">
-              <Suspense
-                fallback={
-                  <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />
-                }
-              >
-                <Gallery
-                  product={product}
-                />
-              </Suspense>
-            </div>
-
-            <div className="basis-full lg:basis-2/6">
-              <Suspense fallback={null}>
-                <ProductDescription product={product} />
-              </Suspense>
-            </div>
-          </div>
-        </div>
-        <Footer />
+        <ProductDetails product={product}></ProductDetails>
       </ProductProvider>
     </Wrapper>
   );

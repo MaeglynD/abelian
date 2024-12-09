@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation';
 
 export async function getCartId(): Promise<string | undefined> {
   const tokenHash = process.env.NEXT_PUBLIC_FW_STOREFRONT_TOKEN;
-  return cookies().get(`${tokenHash}/cartId`)?.value;
+  return (await cookies()).get(`${tokenHash}/cartId`)?.value;
 }
 
 function setCartId(cartId: string) {
@@ -18,7 +18,7 @@ function setCartId(cartId: string) {
 
 export async function addItem(prevState: any, selectedVariantId: string | undefined) {
   try {
-    const cart = await getCart(await getCartId(), 'USD') || (await createCartAndSetCookie());
+    const cart = (await getCart(await getCartId(), 'GBP')) || (await createCartAndSetCookie());
     const cartId = cart.id!!;
 
     if (!cart || !selectedVariantId) {
@@ -34,7 +34,7 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
 
 export async function removeItem(prevState: any, merchandiseId: string) {
   try {
-    const cart = await getCart(await getCartId(), 'USD') || (await createCartAndSetCookie());
+    const cart = (await getCart(await getCartId(), 'GBP')) || (await createCartAndSetCookie());
     const cartId = cart.id!!;
 
     if (!cart) {
@@ -64,7 +64,7 @@ export async function updateItemQuantity(
   const { merchandiseId, quantity } = payload;
 
   try {
-    const cart = await getCart(await getCartId(), 'USD') || (await createCartAndSetCookie());
+    const cart = (await getCart(await getCartId(), 'GBP')) || (await createCartAndSetCookie());
     const cartId = cart.id!!;
 
     if (!cart) {
@@ -105,13 +105,13 @@ export async function redirectToCheckout(currency: string) {
     return 'Missing cart ID';
   }
 
-  let cart = await getCart(cartId, 'USD');
+  let cart = await getCart(cartId, 'GBP');
 
   if (!cart) {
     return 'Error fetching cart';
   }
 
-  redirect(`${CHECKOUT_URL}/checkout/?cartId=${cartId}&cartCurrency=USD`);
+  redirect(`${CHECKOUT_URL}/checkout/?cartId=${cartId}&cartCurrency=GBP`);
 }
 
 export async function createCartAndSetCookie() {

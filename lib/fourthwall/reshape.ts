@@ -38,6 +38,8 @@ export const reshapeProducts = (products: FourthwallProduct[]) => {
   return reshapedProducts;
 };
 
+const cleanHtml = (x: string): string => x.replace(/<[^>]*>/g, '').replace(/&#39;/g, "'");
+
 export const reshapeProduct = (product: FourthwallProduct): Product | undefined => {
   if (!product) {
     return undefined;
@@ -52,18 +54,20 @@ export const reshapeProduct = (product: FourthwallProduct): Product | undefined 
   const attributes = variants.map((v) => (v.attributes))
 
   const sizes = new Set(attributes.filter((a) => !!a.size).map((v) => v.size?.name));
-  const colors = new Set(attributes.filter((a) => !!a.color).map((v) => v.color?.name));
+  const colors = new Set(attributes.filter((a) => !!a.color).map((v) => `${v.color?.swatch}:${v.color?.name}`));
 
   const reshapedVariants = reshapeVariants(variants);
+
+  
 
   return {
     ...rest,
     handle: product.slug,
     title: product.name,
     descriptionHtml: product.description,
-    description: product.description,
+    description: cleanHtml(product.description),
     images: reshapeImages(images, product.name),
-    variants: reshapedVariants,
+    variants: reshapedVariants.filter(x => x.availableForSale),
     priceRange: {
       minVariantPrice: {
         amount: minPrice.toString(),
@@ -106,13 +110,17 @@ const reshapeVariants = (variants: FourthwallProductVariant[]): ProductVariant[]
     title: v.name,
     availableForSale: v.stock.type === 'UNLIMITED' || (v.stock.inStock || 0) > 0,
     images: reshapeImages(v.images, v.name),
-    selectedOptions: [{
-      name: 'Size',
-      value: v.attributes.size?.name
-    }, {
-      name: 'Color',
-      value: v.attributes.color?.name
-    }],
+    selectedOptions: {
+      size: v.attributes.size?.name,
+      color: v.attributes.color?.name
+    },
+    // selectedOptions: [{
+    //   name: 'Size',
+    //   value: v.attributes.size?.name
+    // }, {
+    //   name: 'Color',
+    //   value: v.attributes.color?.name,
+    // }],
     price: reshapeMoney(v.unitPrice),
   }))
 }
@@ -134,7 +142,10 @@ const reshapeCartItem = (item: FourthwallCartItem): CartItem => {
       id: item.variant.id,
       title: item.variant.name,
       // TODO: Stubbed out
-      selectedOptions: [],
+      selectedOptions: {
+        size: item.variant.attributes.size?.name,
+        color: item.variant.attributes.color?.swatch
+      },
       product: {
         // TODO: need this product info in model
         id: item.variant.product?.id || 'TT', 
