@@ -43,6 +43,9 @@ export default function CartModal() {
       <Transition show={isOpen}>
         <div className={`${s.container} transition duration-200 ease-in data-[closed]:opacity-0`}>
           <div className={s.backdrop} onClick={() => setIsOpen(false)} />
+          <div className={s.mobileClose} onClick={() => setIsOpen(false)}>
+            <Latex>$\bigotimes$</Latex>
+          </div>
           <div className={s.modal}>
             <div className={s.title}>
               <Latex>$\text{`{Cart}`}$</Latex>

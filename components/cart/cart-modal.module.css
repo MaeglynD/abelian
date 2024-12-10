@@ -18,6 +18,30 @@
   background: rgba(0,0,0,0.1);
 }
 
+.mobileClose{
+  background: none;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  position:fixed;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+  z-index: 11;
+  display: none; 
+  justify-content: center;
+  align-items: center;
+}
+
+.mobileClose:hover{
+  background: rgba(0,0,0,0.1);
+}
+
 .container{
   position: fixed;
   top: 0;
@@ -167,6 +191,7 @@
 }
 
 .checkoutBtn{
+  user-select: none;
   background: rgba(0,0,0,0.8);
   color: white;
   border: 0;
@@ -186,4 +211,10 @@
   background: rgba(0,0,0,0.1);
   color: rgba(0,0,0,0.4);
   cursor: not-allowed; 
+}
+
+@media (width < 1200px){
+  .mobileClose{
+    display: flex;
+  }
 }
