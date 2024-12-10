@@ -31,7 +31,7 @@
   display: flex;
   justify-content: center;
   margin: auto;
-  max-width: 1200px;
+  max-width: 1600px;
   width: 100%;
   padding: 20px;
 }
@@ -162,7 +162,7 @@ img.hiddenImage{
 
 .descriptionContainer{
   width: 100%;
-  max-width: 40%;
+  max-width: 500px;
   line-height:2;
   padding: 15px;
   padding-bottom: 0;
@@ -239,8 +239,8 @@ img.hiddenImage{
   background: rgba(0,0,0,0.8);
   border: none;
   outline: none;
-  padding: 11px;
-  font-size: 12px;
+  padding: 12px;
+  font-size: 13px;
   cursor: pointer;
   color: white;
   transition: 0.2s;
@@ -248,4 +248,31 @@ img.hiddenImage{
 
 .addToCart:hover{
   background: rgba(0,0,0,0.75);
+}
+
+@media (width < 1200px){
+  .container{
+    padding-top: 50px;
+  }
+
+  .innerContainer{
+    flex-direction: column;
+  }
+
+  .descriptionContainer{
+    max-width: unset;
+    padding-top: 50px;
+  }
+
+  .description{
+    font-size: 13px;
+  }
+
+  .title{
+    font-size: 22px;
+  }
+
+  .descriptionUpperHalf{
+    padding-bottom: 25px;
+  }
 }

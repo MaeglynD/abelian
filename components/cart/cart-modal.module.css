@@ -46,7 +46,7 @@
 }
 
 .title{
-  font-size: 28px;
+  font-size: 26px;
   padding: 30px;
   padding-bottom: 0;
 }
@@ -148,6 +148,7 @@
 }
 
 .itemPrice{
+  font-size: 13px;
   position: absolute;
   bottom: 20px;
   right: 0;
@@ -160,7 +161,7 @@
 
 .totalPrice{
   text-align: right;
-  font-size: 30px;
+  font-size: 22px;
   padding-bottom: 20px;
 }
 
@@ -170,8 +171,8 @@
   border: 0;
   outline:0;
   width: 100%;
-  padding: 15px;
-  font-size: 16px;
+  padding: 12px;
+  font-size: 14px;
   cursor: pointer;
   transition: 0.2s;
 }
