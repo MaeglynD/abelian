@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import './globals.css';
 
 const { TWITTER_CREATOR, TWITTER_SITE } = process.env;
-const SITE_NAME = 'Abelian store';
+const SITE_NAME = 'Abelian Shop';
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   : 'http://localhost:3000';
