@@ -208,7 +208,7 @@ export function ProductDetails({ product }: { product: Product }) {
               <Env />
 
               <OrbitControls
-                autoRotate
+                // autoRotate
                 autoRotateSpeed={0.2}
                 enablePan={false}
                 enableZoom={true}
