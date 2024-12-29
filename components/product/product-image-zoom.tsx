@@ -25,7 +25,7 @@ export default function ProductImageZoom({
 
   return (
     <div
-      className={`relative overflow-hidden flex justify-center items-center ${!isActive ? 'opacity-0' : ''}`}
+      className={`relative overflow-hidden flex justify-center items-center transition-opacity duration-200 ${!isActive ? 'opacity-0' : 'opacity-100'}`}
     >
       <img
         src={src}
