@@ -11,6 +11,7 @@ import { Canvas } from '@react-three/fiber';
 import { addItem } from 'components/cart/actions';
 import { useCart } from 'components/cart/cart-context';
 import { useProduct } from 'components/product/product-context';
+import ProductImageZoom from 'components/product/product-image-zoom';
 import 'katex/dist/katex.min.css';
 import { Leva, useControls } from 'leva';
 import { Image, Product } from 'lib/types';
@@ -167,9 +168,10 @@ export function ProductDetails({ product }: { product: Product }) {
         </div>
 
         <div className={s.showcase}>
-          <img
+          <ProductImageZoom
             src={product.variants[activeVariant]?.images[activeImage]?.url || ''}
-            className={`${activeControl !== 0 ? s.hiddenImage : ''}`}
+            zoomScale={2.7}
+            isActive={activeControl == 0}
           />
 
           <div
@@ -206,7 +208,7 @@ export function ProductDetails({ product }: { product: Product }) {
               <Env />
 
               <OrbitControls
-                // autoRotate
+                autoRotate
                 autoRotateSpeed={0.2}
                 enablePan={false}
                 enableZoom={true}

@@ -84,10 +84,7 @@
 
 
 .showcase img{
-  pointer-events: none;
-  width: 100%;
   object-fit: contain;
-  opacity: 1;
   padding: 38px;
   max-height: 458px;
 }
@@ -97,6 +94,7 @@ img.hiddenImage{
 }
 
 .canvasContainer{
+  cursor: grab;
   position: absolute;
   top: 0;
   left: 0;
