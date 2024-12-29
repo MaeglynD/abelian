@@ -37,7 +37,7 @@ export default function ProductImageZoom({
       <img
         ref={imgRef}
         src={src}
-        className="w-fit h-full object-cover transition-transform duration-200"
+        className="w-fit h-full object-cover transition-transform duration-500"
         style={{
           transform: isHovering ? `scale(${zoomScale})` : 'scale(1)',
           transformOrigin: `${XY.x}% ${XY.y}%`
