@@ -11,7 +11,7 @@ import { Canvas } from '@react-three/fiber';
 import { addItem } from 'components/cart/actions';
 import { useCart } from 'components/cart/cart-context';
 import { useProduct } from 'components/product/product-context';
-import ProductImageZoom from 'components/product/product-image-zoom';
+// import ProductImageZoom from 'components/product/product-image-zoom';
 import 'katex/dist/katex.min.css';
 import { Leva, useControls } from 'leva';
 import { Image, Product } from 'lib/types';
@@ -168,11 +168,17 @@ export function ProductDetails({ product }: { product: Product }) {
         </div>
 
         <div className={s.showcase}>
-          <ProductImageZoom
+          <img
+            src={product.variants[activeVariant]?.images[activeImage]?.url || ''}
+            className={`${s.showcaseImg} ${activeControl !== 0 ? s.hiddenImage : ''}`}
+          />
+
+          {/* Functional but stylistically questionable */}
+          {/* <ProductImageZoom
             src={product.variants[activeVariant]?.images[activeImage]?.url || ''}
             zoomScale={2.7}
             isActive={activeControl == 0}
-          />
+          /> */}
 
           <div
             className={s.canvasContainer}
