@@ -32,3 +32,9 @@
   height: 100%;
   object-fit: contain;
 }
+
+@media (width < 1000px){
+  .listContainer{
+      padding: 0 30px;
+  }
+}
