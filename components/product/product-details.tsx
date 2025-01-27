@@ -14,10 +14,9 @@ import { useProduct } from 'components/product/product-context';
 // import ProductImageZoom from 'components/product/product-image-zoom';
 import 'katex/dist/katex.min.css';
 import { Leva, useControls } from 'leva';
-import { Image as _Image, Product } from 'lib/types';
+import { Image, Product } from 'lib/types';
 import { dynamicSizeLabels, formatPrice } from 'lib/utils';
 import { Link } from 'next-view-transitions';
-import Image from 'next/image';
 import { useActionState, useMemo, useRef, useState, useTransition } from 'react';
 import Latex from 'react-latex-next';
 import { E3, Klein, MobiusStrip, Sphere, Torus } from './geometry';
@@ -55,7 +54,7 @@ function GeometryContainer({
   imgIndex,
   activeControl
 }: {
-  imgs: _Image[];
+  imgs: Image[];
   imgIndex: number;
   activeControl: number;
 }) {
@@ -162,28 +161,33 @@ export function ProductDetails({ product }: { product: Product }) {
                   }
                 }}
               >
-                <Image
+                <img src={url} className={s.galleryImg} />
+                {/* <Image
                   priority={true}
                   width={89}
                   height={119}
                   alt="shirt"
                   src={url}
                   className={s.galleryImg}
-                />
+                /> */}
               </div>
             ))}
           </div>
         </div>
 
         <div className={s.showcase}>
-          <Image
+          <img
+            src={product.variants[activeVariant]?.images[activeImage]?.url || ''}
+            className={`${s.showcaseImg} ${activeControl !== 0 ? s.hiddenImage : ''}`}
+          />
+          {/* <Image
             width={750}
             height={1000}
             alt="shirt"
             priority={true}
             src={product.variants[activeVariant]?.images[activeImage]?.url || ''}
             className={`${s.showcaseImg} ${activeControl !== 0 ? s.hiddenImage : ''}`}
-          />
+          /> */}
 
           {/* Functional but stylistically questionable */}
           {/* <ProductImageZoom
