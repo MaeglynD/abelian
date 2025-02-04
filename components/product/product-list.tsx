@@ -2,7 +2,7 @@
 
 import { Product } from 'lib/types';
 import { Link } from 'next-view-transitions';
-import Image from 'next/image';
+import Image from '../image-wrapper';
 import s from './product-list.module.css';
 
 export function ProductList({ products }: { products: Product[] }) {

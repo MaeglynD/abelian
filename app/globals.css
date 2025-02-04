@@ -14,3 +14,38 @@ body, html{
   margin: 0;
   padding: 0;
 }
+
+::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+    background-color: rgba(0,0,0,0);
+    -webkit-border-radius: 100px;
+    transition: 0.2s background-color;
+}
+
+::-webkit-scrollbar:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.1);
+    -webkit-border-radius: 100px;
+    transition: 0.2s;
+}
+::-webkit-scrollbar-thumb:active {
+    background: rgba(0,0,0,0.3);
+    -webkit-border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  min-height: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  min-width: 10px;
+}
+
+@media (width < 1200px){
+  html, body{
+    height: 100%;
+  }
+}

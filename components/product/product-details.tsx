@@ -3,6 +3,7 @@
 import {
   AccumulativeShadows,
   Environment,
+  Loader,
   OrbitControls,
   RandomizedLight,
   useTexture
@@ -13,76 +14,34 @@ import { useCart } from 'components/cart/cart-context';
 import { useProduct } from 'components/product/product-context';
 // import ProductImageZoom from 'components/product/product-image-zoom';
 import 'katex/dist/katex.min.css';
-import { Leva, useControls } from 'leva';
-import { Image, Product } from 'lib/types';
+import { Product } from 'lib/types';
 import { dynamicSizeLabels, formatPrice } from 'lib/utils';
 import { Link } from 'next-view-transitions';
-import { useActionState, useMemo, useRef, useState, useTransition } from 'react';
+import { Suspense, useActionState, useMemo, useRef, useState, useTransition } from 'react';
 import Latex from 'react-latex-next';
+import ImageWrapper from '../image-wrapper';
 import { E3, Klein, MobiusStrip, Sphere, Torus } from './geometry';
 import s from './product-details.module.css';
 
-function Env() {
-  const [preset, setPreset] = useState('dawn');
-  const [inTransition, startTransition] = useTransition();
-  const { blur } = useControls({
-    blur: { value: 0.34, min: 0, max: 1 },
-    preset: {
-      value: preset,
-      options: [
-        'sunset',
-        'dawn',
-        'night',
-        'warehouse',
-        'forest',
-        'apartment',
-        'studio',
-        'city',
-        'park',
-        'lobby'
-      ],
-
-      onChange: (value) => startTransition(() => setPreset(value))
-    }
-  });
-  // @ts-ignore
-  return <Environment preset={preset} background blur={blur} />;
-}
-
-function GeometryContainer({
-  imgs,
-  imgIndex,
-  activeControl
-}: {
-  imgs: Image[];
-  imgIndex: number;
-  activeControl: number;
-}) {
-  const { roughness } = useControls({
-    roughness: { value: 0.37, min: 0, max: 1 }
-  });
-  const textures = useTexture(imgs.map((x) => x?.url || ''));
+function Geometry({ textureUrl, id, activeControl }) {
+  const texture = useTexture(textureUrl);
   const controlToGeometry = useMemo(
     () => ({ 1: E3, 2: Torus, 3: Sphere, 4: Klein, 5: MobiusStrip }),
     []
   );
   const ActiveGeometry = controlToGeometry[activeControl as keyof typeof controlToGeometry];
 
+  // Bad! I know! Don't blame me! Blame fourthwall! I swear its not me!
   // Conditional rendering with the usual {x && <...>} breaks because of the whitespace induced by the first term
   if (activeControl === 0) {
     return <></>;
   } else {
-    return (
-      <ActiveGeometry
-        texture={textures[imgIndex]}
-        key={imgs[imgIndex]!.url}
-        roughness={roughness}
-      />
-    );
+    return <ActiveGeometry texture={texture} key={id} roughness={0.37} />;
   }
 }
 
 export function ProductDetails({ product }: { product: Product }) {
+  const [isPending, startTransition] = useTransition();
   const [activeControl, setActiveControl] = useState(0);
   const [activeVariant, setActiveVariant] = useState(0);
   const [activeImage, setActiveImage] = useState(0);
@@ -103,111 +62,105 @@ export function ProductDetails({ product }: { product: Product }) {
     '\\mathbb{M}'
   ];
 
-  const sizes = product.options.find((x) => x.id === 'size')?.values.slice(0, 5);
-  const colors = product.options
-    .find((x) => x.id === 'color')
-    ?.values.map((x) => {
-      const [hex, name] = x.split(':');
-      return { hex, name };
-    });
+  const sizes = useMemo(
+    () => product.options.find((x) => x.id === 'size')?.values.slice(0, 5),
+    [product]
+  );
+  const colors = useMemo(
+    () =>
+      product.options
+        .find((x) => x.id === 'color')
+        ?.values.map((x) => {
+          const [hex, name] = x.split(':');
+          return { hex, name };
+        }),
+    [product]
+  );
   const sizeLabels = useMemo(() => dynamicSizeLabels(sizes!), [product]);
 
-  const galleryScroll = (id: string) => {
-    try {
-      // @ts-ignore
-      galleryRef.current.scrollTo({
-        behavior: 'smooth',
-        top:
-          document.getElementById(id)!.getBoundingClientRect().top -
-          // @ts-ignore
-          galleryRef.current.getBoundingClientRect().top -
-          30
-      });
-    } catch {}
-  };
+  const galleryScroll = useMemo(() => {
+    return (id: string) => {
+      try {
+        // @ts-ignore
+        galleryRef.current.scrollTo({
+          behavior: 'smooth',
+          top:
+            document.getElementById(id)!.getBoundingClientRect().top -
+            // @ts-ignore
+            galleryRef.current.getBoundingClientRect().top -
+            30
+        });
+      } catch {}
+    };
+  }, []);
 
-  const updateVariant = ({
-    size = product.variants[activeVariant]?.selectedOptions.size,
-    color = product.variants[activeVariant]?.selectedOptions.color
-  }) => {
-    setActiveImage(0);
-    setActiveVariant(
-      product.variants.findIndex(
-        (x) => x.selectedOptions.size === size && x.selectedOptions.color === color
-      )
-    );
-    galleryScroll('gal-0');
-  };
+  const updateVariant = useMemo(() => {
+    return ({
+      size = product.variants[activeVariant]?.selectedOptions.size,
+      color = product.variants[activeVariant]?.selectedOptions.color
+    }) => {
+      setActiveImage(0);
+      setActiveVariant(
+        product.variants.findIndex(
+          (x) => x.selectedOptions.size === size && x.selectedOptions.color === color
+        )
+      );
+      galleryScroll('gal-0');
+    };
+  });
 
   return (
-    <div className={s.container}>
+    <div className={s.prodContainer}>
       <Link className={s.backLink} href="/" prefetch={true}>
         <Latex>$f^{`{-1}`}$</Latex>
       </Link>
-
-      <div className={s.innerContainer}>
-        <div className={s.gallery}>
-          <div className={s.galleryInner} ref={galleryRef}>
-            {product.variants[activeVariant]?.images.map(({ url }, i) => (
-              <div
-                key={`gal-${i}`}
-                id={`gal-${i}`}
-                className={`${s.galleryItem} ${activeImage === i ? s.activeGalleryImg : ''}`}
-                onClick={() => {
-                  if (activeImage !== i) {
-                    setActiveImage(i);
-                    setActiveImageUrl(product.variants[activeVariant]?.images[activeImage]?.url);
-                    galleryScroll(`gal-${i}`);
-                  }
-                }}
-              >
-                <img src={url} className={s.galleryImg} />
-                {/* <Image
-                  priority={true}
-                  width={89}
-                  height={119}
-                  alt="shirt"
-                  src={url}
-                  className={s.galleryImg}
-                /> */}
-              </div>
-            ))}
-          </div>
+      <div className={s.prodInner}>
+        <div className={s.prodGallery} ref={galleryRef}>
+          {product.variants[activeVariant]?.images.map(({ url }, i) => (
+            <div
+              key={`gal-${i}`}
+              id={`gal-${i}`}
+              className={`${s.prodGalleryItem} ${activeImage === i ? s.active : ''}`}
+              onClick={() => {
+                if (activeImage !== i) {
+                  setActiveImage(i);
+                  setActiveImageUrl(product.variants[activeVariant]?.images[activeImage]?.url);
+                  galleryScroll(`gal-${i}`);
+                }
+              }}
+            >
+              <ImageWrapper
+                priority={true}
+                width={89}
+                height={119}
+                alt="shirt"
+                src={url}
+                className={s.prodGalleryImg}
+              />
+            </div>
+          ))}
         </div>
 
-        <div className={s.showcase}>
-          <img
-            src={product.variants[activeVariant]?.images[activeImage]?.url || ''}
-            className={`${s.showcaseImg} ${activeControl !== 0 ? s.hiddenImage : ''}`}
-          />
-          {/* <Image
-            width={750}
-            height={1000}
-            alt="shirt"
-            priority={true}
-            src={product.variants[activeVariant]?.images[activeImage]?.url || ''}
-            className={`${s.showcaseImg} ${activeControl !== 0 ? s.hiddenImage : ''}`}
-          /> */}
-
-          {/* Functional but stylistically questionable */}
-          {/* <ProductImageZoom
-            src={product.variants[activeVariant]?.images[activeImage]?.url || ''}
-            zoomScale={2.7}
-            isActive={activeControl == 0}
-          /> */}
-
-          <div
-            className={s.canvasContainer}
-            style={{ zIndex: `${activeControl === 0 ? '-1' : '2'}` }}
-          >
+        <div className={s.prodStage}>
+          <div className={s.prodCanvasWrapper}>
+            <div className={`${s.prodActiveImg}  ${activeControl !== 0 ? s.inactive : ''}`}>
+              <ImageWrapper
+                priority={true}
+                width={300}
+                height={700}
+                alt="shirt"
+                src={product.variants[activeVariant]?.images[activeImage]?.url || ''}
+              />
+            </div>
             <Canvas shadows camera={{ position: [0, 0, 3.6], fov: 50 }}>
               <group position={[0, -0.65, 0]}>
-                <GeometryContainer
-                  imgs={product.variants[activeVariant]?.images!}
-                  imgIndex={activeImage}
-                  activeControl={activeControl}
-                />
-
+                <Suspense fallback={null}>
+                  <Geometry
+                    textureUrl={product.variants[activeVariant]?.images[activeImage].url}
+                    id={product.variants[activeVariant]?.images[activeImage].id}
+                    activeControl={activeControl}
+                  />
+                </Suspense>
                 <AccumulativeShadows
                   temporal
                   frames={200}
@@ -226,12 +179,10 @@ export function ProductDetails({ product }: { product: Product }) {
                   />
                 </AccumulativeShadows>
               </group>
-
-              <Env />
-
+              <Environment preset="dawn" background blur={0.34} />
               <OrbitControls
-                // autoRotate
-                autoRotateSpeed={0.2}
+                autoRotate
+                autoRotateSpeed={0.1}
                 enablePan={false}
                 enableZoom={true}
                 maxDistance={15}
@@ -239,15 +190,17 @@ export function ProductDetails({ product }: { product: Product }) {
                 maxPolarAngle={Math.PI / 2.1}
               />
             </Canvas>
-
-            <Leva collapsed hidden />
+            <Loader
+              containerStyles={{ background: 'rgba(0, 0, 0, 0.1)', backdropFilter: 'blur(5px)' }}
+              barStyles={{ background: 'rgba(1,1,1,0.4)' }}
+              innerStyles={{ background: 'rgba(255, 255, 255, 0.3' }}
+            />
           </div>
-
-          <div className={s.showcaseControls}>
+          <div className={s.prodControls}>
             {controls.map((tex, i) => (
               <div
                 key={`control-${i}`}
-                className={`${s.showcaseControl} ${activeControl === i ? s.controlActive : ''}`}
+                className={`${s.prodControl} ${activeControl === i ? s.prodControlActive : ''}`}
                 onClick={() => setActiveControl(i)}
               >
                 <Latex>${tex}$</Latex>
@@ -255,8 +208,7 @@ export function ProductDetails({ product }: { product: Product }) {
             ))}
           </div>
         </div>
-
-        <div className={s.descriptionContainer}>
+        <div className={s.prodInfo}>
           <div className={s.descriptionUpperHalf}>
             <div className={s.title}>
               <Latex>$\text{`{${product.title}}`}$</Latex>

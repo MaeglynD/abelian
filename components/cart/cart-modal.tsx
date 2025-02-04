@@ -3,10 +3,12 @@
 import { Transition } from '@headlessui/react';
 import { updateItemQuantity } from 'components/cart/actions';
 import 'katex/dist/katex.min.css';
-import { dynamicSizeLabels, formatPrice } from 'lib/utils';
-import { useActionState, useEffect, useMemo, useRef, useState } from 'react';
+import { formatPrice } from 'lib/utils';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import Latex from 'react-latex-next';
+import { SIZE_LABELS } from '../../lib/constants';
+import ImageWrapper from '../image-wrapper';
 import { redirectToCheckout } from './actions';
 import { useCart } from './cart-context';
 import s from './cart-modal.module.css';
@@ -26,13 +28,14 @@ export default function CartModal() {
     }
   }, [isOpen, cart?.totalQuantity, quantityRef]);
 
-  const sizeLabels = useMemo(
-    () =>
-      dynamicSizeLabels([
-        ...new Set(cart?.lines.map((x) => x.merchandise.selectedOptions.size || ''))
-      ]),
-    [cart]
-  );
+  const sizeLabels = SIZE_LABELS;
+  // const sizeLabels = useMemo(
+  //   () =>
+  //     dynamicSizeLabels([
+  //       ...new Set(cart?.lines.map((x) => x.merchandise.selectedOptions.size || ''))
+  //     ]),
+  //   [cart]
+  // );
 
   return (
     <>
@@ -56,7 +59,13 @@ export default function CartModal() {
                 {cart.lines.map((p, i) => (
                   <div key={`item-${i}`} className={s.item}>
                     <div className={s.itemImg}>
-                      <img src={p.merchandise.product.featuredImage.url} />
+                      <ImageWrapper
+                        priority={true}
+                        width={89}
+                        height={119}
+                        alt="shirt"
+                        src={p.merchandise.product.featuredImage.url}
+                      />
                     </div>
 
                     <div className={s.itemInfo}>

@@ -1,11 +1,3 @@
-.container{
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 15vh;
-}
-
 .backLink{
   background: none;
   border: none;
@@ -26,149 +18,6 @@
 
 .backLink:hover{
   background: rgba(0,0,0,0.1);
-}
-
-.innerContainer{
-  user-select: none;
-  display: flex;
-  justify-content: center;
-  margin: auto;
-  max-width: 1600px;
-  width: 100%;
-  padding: 20px;
-}
-
-.gallery{
-  min-width: 112px;
-  max-width: 112px;
-  position: relative;
-}
-
-.galleryInner{
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  overflow-y:auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.galleryInner::-webkit-scrollbar { 
-  display: none;
-}
-
-.galleryItem{
-  width: 100%;
-  object-fit: contain;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.galleryImg{
-  width: 100%;
-  object-fit: contain;
-  pointer-events: none;
-  border: 1px solid transparent;
-}
-
-.activeGalleryImg{
-  border: 1px solid black;
-}
-
-.showcase{
-  width: 100%;
-  position: relative;
-  user-select: none;
-}
-
-.showcaseImg{
-  pointer-events: none;
-  width: 100%;
-  object-fit: contain;
-  opacity: 1;
-  padding: 38px;
-  max-height: 458px;
-}
-
-img.hiddenImage{
-  opacity: 0;
-}
-
-.canvasContainer{
-  cursor: grab;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: calc(100% - 60px);
-  padding: 15px;
-}
-
-.canvasContainer canvas{
-  mask-image: 
-    linear-gradient(to right, 
-      transparent 0%, 
-      white 20%, 
-      white 90%, 
-      transparent 100%
-    ),
-    linear-gradient(to bottom, 
-      transparent 0%, 
-      white 20%, 
-      white 90%, 
-      transparent 100%
-    ),
-    linear-gradient(to left, 
-      transparent 0%, 
-      white 20%, 
-      white 90%, 
-      transparent 100%
-    ),
-    linear-gradient(to top, 
-      transparent 0%, 
-      white 20%, 
-      white 90%, 
-      transparent 100%
-    );
-  mask-composite: intersect;
-}
-
-
-.showcaseControls{
-  display: flex;
-  justify-content: center;
-  padding-top: 15px;
-}
-
-.showcaseControl{
-  font-size: 18px;
-  width: 52px;
-  height: 52px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-.showcaseControl:hover{
-  background: rgba(0,0,0,0.04);
-}
-
-.showcaseControl.controlActive{
-  background: rgba(0,0,0,0.04);
-  border: 1px solid black;
-}
-
-.descriptionContainer{
-  width: 100%;
-  max-width: 500px;
-  line-height:2;
-  padding: 15px;
-  padding-bottom: 0;
-  display: flex;
-  flex-direction: column;
 }
 
 .title{
@@ -251,15 +100,154 @@ img.hiddenImage{
   background: rgba(0,0,0,0.75);
 }
 
+
+.prodContainer{
+  padding: 0 30px;
+  padding-top: 15vh;
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.prodInner{
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(150px, 1fr) 5fr 3fr;
+  grid-template-rows: minmax(400px, min(600px, 50vh));
+  min-height: 400px;
+  max-height: min(500px, 50vh);
+  height: 100%;
+}
+
+.prodGallery{
+  overflow-y: scroll;
+  padding-right: 22px;
+}
+
+.prodGalleryItem{
+  width: 100%;
+  object-fit: contain;
+  padding: 10px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.prodGalleryItem.active{
+  border: 1px solid black;
+  }
+
+.prodGalleryImg{
+  width: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.prodStage{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-width: max(600px, 100%);
+
+}
+.prodCanvasWrapper{
+  position: relative;
+  background: #a089ad;
+  width: 100%;
+  height: 100%;
+  mask-image: 
+    linear-gradient(to right, 
+      transparent 0%, 
+      white 20%, 
+      white 90%, 
+      transparent 100%
+    ),
+    linear-gradient(to bottom, 
+      transparent 0%, 
+      white 20%, 
+      white 90%, 
+      transparent 100%
+    ),
+    linear-gradient(to left, 
+      transparent 0%, 
+      white 20%, 
+      white 90%, 
+      transparent 100%
+    ),
+    linear-gradient(to top, 
+      transparent 0%, 
+      white 20%, 
+      white 90%, 
+      transparent 100%
+    );
+  mask-composite: intersect;
+}
+
+.prodInfo{
+  display: flex;
+  flex-direction: column;
+  line-height: 2;
+  padding: 0 30px;
+  padding-top: 20px;
+}
+
+.prodControls{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.prodControl{
+  font-size: 18px;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.prodControl:hover{
+  background: rgba(0,0,0,0.04);
+}
+
+.prodControl.prodControlActive{
+  background: rgba(0,0,0,0.04);
+  border: 1px solid black;
+}
+
+.prodActiveImg{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 5;
+  opacity: 1;
+  transition: 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.inactive{
+  opacity: 0;
+  z-index: -1;
+}
+
+.prodActiveImg img{
+  height: 100%;
+  max-height: 80%;
+  width: auto;
+}
+
+.prodCanvasWrapper canvas{
+  width: 100% !important;
+}
+
 @media (width < 1200px){
-  .container{
-    padding-top: 50px;
-  }
-
-  .innerContainer{
-    flex-direction: column;
-  }
-
   .descriptionContainer{
     max-width: unset;
     padding-top: 50px;
@@ -275,5 +263,32 @@ img.hiddenImage{
 
   .descriptionUpperHalf{
     padding-bottom: 25px;
+  }
+
+  .prodContainer{
+    padding-top: 10vh;
+    padding-bottom: 50px;
+    height: 100%;
+  }
+
+  .prodInner{
+    display: flex;
+    flex-direction: column;
+    max-height: unset;
+    height: 100%;
+  }
+
+  .prodStage{
+    height: 100%;
+    max-height: 60vh;
+  }
+
+  .prodGallery{
+    display: none;
+  }
+
+  .prodCanvasWrapper canvas{
+    height: 100% !important;
+    display: flex !important;
   }
 }
