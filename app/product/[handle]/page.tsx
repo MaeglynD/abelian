@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { getCartId } from 'components/cart/actions';
 import { ProductProvider } from 'components/product/product-context';
-import { ProductDetails } from 'components/product/product-details';
+import ProductDetails from 'components/product/product-details';
 import { Wrapper } from 'components/wrapper';
 import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
 import { getCart, getProduct } from 'lib/fourthwall';

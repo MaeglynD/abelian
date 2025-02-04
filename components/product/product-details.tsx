@@ -40,7 +40,7 @@ function Geometry({ textureUrl, id, activeControl }) {
   }
 }
 
-export function ProductDetails({ product }: { product: Product }) {
+export default function ProductDetails({ product }: { product: Product }) {
   const [isPending, startTransition] = useTransition();
   const [activeControl, setActiveControl] = useState(0);
   const [activeVariant, setActiveVariant] = useState(0);
@@ -107,7 +107,7 @@ export function ProductDetails({ product }: { product: Product }) {
       );
       galleryScroll('gal-0');
     };
-  });
+  }, [product]);
 
   return (
     <div className={s.prodContainer}>
@@ -157,6 +157,7 @@ export function ProductDetails({ product }: { product: Product }) {
                 <Suspense fallback={null}>
                   <Geometry
                     textureUrl={product.variants[activeVariant]?.images[activeImage].url}
+                    // @ts-ignore
                     id={product.variants[activeVariant]?.images[activeImage].id}
                     activeControl={activeControl}
                   />
