@@ -68,7 +68,7 @@ export function ProductList({ products }: { products: Product[] }) {
 }
 
 function ProductStage({ products }) {
-  const GPUTier = useDetectGPU();
+  const GPUTier = useDetectGPU({ benchmarksURL: './benchmarks' });
   const goodGPU = GPUTier.tier >= 2;
   const [hovered, setHovered] = useState(false);
   const [text, setText] = useState('');
@@ -291,7 +291,7 @@ function Product({ product: p, goodGPU, hovered, setHovered, setText, onClick })
           ior={1.2}
           chromaticAberration={springs.chromaticAberration}
           backside={true}
-          samples={goodGPU ? 10 : 2}
+          samples={goodGPU ? 5 : 2}
           // resolution={goodGPU ? 512 : 1024}
         />
       </RoundedBox>
