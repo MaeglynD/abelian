@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  AccumulativeShadows,
-  Environment,
-  Loader,
-  OrbitControls,
-  RandomizedLight,
-  useTexture
-} from '@react-three/drei';
+import { Environment, Loader, OrbitControls, useTexture } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { addItem } from 'components/cart/actions';
 import { useCart } from 'components/cart/cart-context';
@@ -162,7 +155,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                     activeControl={activeControl}
                   />
                 </Suspense>
-                <AccumulativeShadows
+                {/* <AccumulativeShadows
                   temporal
                   frames={200}
                   color="purple"
@@ -178,7 +171,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                     position={[5, 3, 2]}
                     bias={0.001}
                   />
-                </AccumulativeShadows>
+                </AccumulativeShadows> */}
               </group>
               <Environment preset="dawn" background blur={0.34} />
               <OrbitControls
