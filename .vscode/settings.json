@@ -3,7 +3,8 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
-    "source.organizeImports": "explicit",
+    "source.organizeImports": false,
+    // "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
   }
 }

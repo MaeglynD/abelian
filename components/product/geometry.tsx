@@ -4,13 +4,14 @@ import { Center } from '@react-three/drei';
 import { useEffect, useMemo } from 'react';
 import * as THREE from 'three';
 // @ts-ignore
-import { ParametricGeometries } from 'three/addons/geometries/ParametricGeometries.js';
+// import { ParametricGeometries } from 'three/addons/geometries/ParametricGeometries.js';
+import { klein, mobius } from 'three/addons/geometries/ParametricFunctions.js';
 // @ts-ignore
 import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
 
 export function Klein({ texture, roughness }: { texture: any; roughness: number }) {
   const geometry = useMemo(() => {
-    return new ParametricGeometry(ParametricGeometries.klein, 100, 20);
+    return new ParametricGeometry(klein, 100, 20);
   }, []);
 
   texture.wrapS = THREE.RepeatWrapping;
@@ -118,7 +119,7 @@ export function Sphere({ texture, roughness }: { texture: any; roughness: number
 
 export function MobiusStrip({ texture, roughness }: { texture: any; roughness: number }) {
   const geometry = useMemo(() => {
-    return new ParametricGeometry(ParametricGeometries.mobius, 100, 20);
+    return new ParametricGeometry(mobius, 100, 20);
   }, []);
 
   texture.wrapS = THREE.RepeatWrapping;
