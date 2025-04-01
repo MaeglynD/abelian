@@ -22,6 +22,7 @@ import {
 } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useControls } from 'leva';
+// @ts-ignore
 import { Product } from 'lib/types';
 import { useCallback, useState, useMemo, useRef, useEffect, Suspense } from 'react';
 import {
@@ -105,6 +106,7 @@ function ProductStage({ products }) {
     config: { duration: 200 }
   });
 
+  // @ts-ignore
   const updateText = useCallback((newText: string) => {
     if (newText) {
       setText(newText);
@@ -120,6 +122,7 @@ function ProductStage({ products }) {
         <Center top>
           <group position={[-6, 0, 2.5]} rotation={[0, 0.7, 0]}>
             <Float>
+              {/* @ts-ignore */}
               <Product
                 product={products[0]}
                 goodGPU={goodGPU}
@@ -131,6 +134,7 @@ function ProductStage({ products }) {
           </group>
           <group position={[0, 0, 0]}>
             <Float>
+              {/* @ts-ignore */}
               <Product
                 product={products[1]}
                 goodGPU={goodGPU}
@@ -142,6 +146,7 @@ function ProductStage({ products }) {
           </group>
           <group position={[6, 0, 2.5]} rotation={[0, -0.7, 0]}>
             <Float>
+              {/* @ts-ignore */}
               <Product
                 product={products[2]}
                 goodGPU={goodGPU}
@@ -212,7 +217,9 @@ function ProductStage({ products }) {
 }
 
 function Product({ product: p, goodGPU, hovered, setHovered, setText, onClick }) {
+  // @ts-ignore
   const matRef = useRef();
+  // @ts-ignore
   const transmissionMatRef = useRef();
 
   const router = useTransitionRouter();
@@ -226,8 +233,11 @@ function Product({ product: p, goodGPU, hovered, setHovered, setText, onClick })
   useCursor(hovered, 'pointer');
 
   useFrame((state, delta) => {
+    // @ts-ignore
     matRef.current.uniforms.iTime.value += delta;
+    // @ts-ignore
     matRef.current.uniforms.iMouse.value.setX(pointer.x);
+    // @ts-ignore
     matRef.current.uniforms.iMouse.value.setY(pointer.y);
   });
 
