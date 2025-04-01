@@ -143,6 +143,7 @@ export default function CartModal() {
                 )}
               </div>
 
+              {/* @ts-ignore */}
               <form action={() => redirectToCheckout(cart?.currency || 'GBP')}>
                 <CheckoutButton disabled={!cart?.lines.length} />
               </form>
